@@ -6,26 +6,25 @@ class Solution {
             map.put(ch, map.getOrDefault(ch, 0) + 1);
         }
 
+        List<Character>[] bucket = new ArrayList[s.length() + 1];
+
+        for (char ch : map.keySet()) {
+            int freq = map.get(ch);
+            if (bucket[freq] == null) {
+                bucket[freq] = new ArrayList<>();
+            }
+            bucket[freq].add(ch);
+        }
+
         StringBuilder result = new StringBuilder();
-
-        while (!map.isEmpty()) {
-
-            char maxChar = ' ';
-            int maxFreq = 0;
-
-            for (char ch : map.keySet()) {
-
-                if (map.get(ch) > maxFreq) {
-                    maxFreq = map.get(ch);
-                    maxChar = ch;
+        for (int freq = s.length(); freq >= 1; freq--) {
+            if (bucket[freq] != null) {
+                for (char ch : bucket[freq]) {
+                    for (int i = 0; i < freq; i++) {
+                        result.append(ch);
+                    }
                 }
             }
-
-            for (int i = 0; i < maxFreq; i++) {
-                result.append(maxChar);
-            }
-
-            map.remove(maxChar);
         }
         return result.toString();
     }
